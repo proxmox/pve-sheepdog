@@ -1,0 +1,25 @@
+Source: pve-sheepdog
+Section: admin
+Priority: extra
+Maintainer: Proxmox Support Team <support@proxmox.com>
+Build-Depends: debhelper (>= 7.0.50~), 
+ autotools-dev, 
+ automake,
+ autoconf,
+ pkg-config,
+ libcorosync-pve-dev,
+ python,
+ liburcu-dev (>= 0.6.7),
+ libssl-dev,
+ libfuse-dev
+Standards-Version: 3.8.4
+Homepage: http://www.osrg.net/sheepdog/
+
+Package: pve-sheepdog
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends} corosync-pve
+Description: Distributed storage system for KVM/QEMU
+ Sheepdog provides highly available block level storage volumes that can be
+ attached to KVM/QEMU virtual machines. Sheepdog scales to several hundreds
+ nodes, and supports advanced volume management features such as snapshot,
+ cloning, and thin provisioning.

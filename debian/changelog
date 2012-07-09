@@ -1,0 +1,5 @@
+pve-sheepdog (0.3.0-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 09 Jul 2012 09:33:55 +0200

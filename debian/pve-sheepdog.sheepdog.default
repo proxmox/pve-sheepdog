@@ -1,0 +1,15 @@
+# Defaults for pve-sheepdog initscript
+# sourced by /etc/init.d/pve-sheepdog
+# installed at /etc/default/pve-sheepdog by the maintainer scripts
+
+# start sheepdog at boot [yes|no]
+START=yes
+
+#
+# This is a POSIX shell fragment
+#
+
+# Additional options that are passed to the Daemon.
+DAEMON_OPTS=""
+
+SHEEPDOG_PATH="/var/lib/vz/sheepdog"

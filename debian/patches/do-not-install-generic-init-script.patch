@@ -1,0 +1,13 @@
+Index: new/script/Makefile.am
+===================================================================
+--- new.orig/script/Makefile.am	2012-07-09 12:37:40.000000000 +0200
++++ new/script/Makefile.am	2012-07-09 12:37:50.000000000 +0200
+@@ -24,7 +24,7 @@
+ 
+ install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)/$(INITDDIR)
+-	$(INSTALL) -m 755 generic $(DESTDIR)/$(INITDDIR)/sheepdog
++#	$(INSTALL) -m 755 generic $(DESTDIR)/$(INITDDIR)/sheepdog
+ 
+ uninstall-local:
+ 	cd $(DESTDIR)/$(INITDDIR) && \

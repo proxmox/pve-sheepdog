@@ -1,0 +1,34 @@
+This work was packaged for Debian by:
+
+    Proxmox Support Team <support@proxmox.com>
+
+    on Mon, 09 Jul 2012 09:32:43 +0200
+
+It was downloaded from:
+
+    git://github.com/collie/sheepdog.git
+
+Upstream Author(s):
+
+    MORITA Kazutaka <morita.kazutaka at lab.ntt.co.jp>
+    FUJITA Tomonori <fujita.tomonori at lab.ntt.co.jp>
+    MORIAI Satoshi <moriai.satoshi at lab.ntt.co.jp>
+
+Copyright:
+
+    Copyright (C) 2009-2010 Nippon Telegraph and Telephone Corporation.
+
+License:
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License version 2 as published by
+    the Free Software Foundation.
+
+    A copy of this license is included for your convenience in:
+    /usr/share/common-licenses/GPL-2	
+
+The Debian packaging is:
+
+    Copyright (C) 2012 Proxmox Support Team <support@proxmox.com>
+
+and is licensed under the AGPL version 3

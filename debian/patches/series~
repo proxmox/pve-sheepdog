@@ -1,0 +1,3 @@
+disable-test-suite.patch
+do-not-install-generic-init.d-script.patch
+fix-manual-path.patch

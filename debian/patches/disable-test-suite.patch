@@ -1,0 +1,13 @@
+Index: new/Makefile.am
+===================================================================
+--- new.orig/Makefile.am	2012-07-09 10:37:27.000000000 +0200
++++ new/Makefile.am	2012-07-09 10:37:44.000000000 +0200
+@@ -17,7 +17,7 @@
+ 
+ sheepdogsysconf_DATA	= 
+ 
+-SUBDIRS			= lib collie sheep include script man tests
++SUBDIRS			= lib collie sheep include script man
+ 
+ if BUILD_SHEEPFS
+ SUBDIRS			+= sheepfs
