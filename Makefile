@@ -27,6 +27,16 @@ ${SDSRC} download:
 	rm -rf ${SDDIR}
 	mv ${SDSRC}.tmp ${SDSRC}
 
+.PHONY: upload
+upload: ${DEB}
+	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw
+	mkdir -p /pve/${RELEASE}/extra
+	rm -f /pve/${RELEASE}/extra/sheepdog*.deb
+	rm -f /pve/${RELEASE}/extra/Packages*
+	cp ${DEB} /pve/${RELEASE}/extra
+	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null > Packages; gzip -9c Packages > Packages.gz
+	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
+
 clean:
 distclean: clean
 	rm -rf sheepdog.git
