@@ -12,4 +12,4 @@ START=yes
 # Additional options that are passed to the Daemon.
 DAEMON_OPTS=""
 
-SHEEPDOG_PATH="/var/lib/vz/sheepdog"
+#SHEEPDOG_PATH="/var/lib/sheepdog"
