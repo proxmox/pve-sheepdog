@@ -2,7 +2,7 @@ RELEASE=2.1
 
 PACKAGE=pve-sheepdog
 PKGREL=1
-SDVER=0.3.0
+SDVER=0.4.0
 
 DEB=${PACKAGE}_${SDVER}-${PKGREL}_amd64.deb
 
@@ -21,7 +21,8 @@ ${DEB} deb: ${SDSRC}
 .PHONY: download
 ${SDSRC} download:
 	rm -rf ${SDDIR} sheepdog.git
-	git clone git://github.com/collie/sheepdog.git -b for-0.4.0 sheepdog.git
+	git clone git://github.com/collie/sheepdog.git sheepdog.git
+	cd sheepdog.git; git checkout -b local v${SDVER}
 	rsync -a --exclude .git --exclude .gitignore sheepdog.git/ ${SDDIR} 
 	tar czf ${SDSRC}.tmp  ${SDDIR}
 	rm -rf ${SDDIR}
