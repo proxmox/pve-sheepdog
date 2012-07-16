@@ -9,7 +9,8 @@ START=yes
 # This is a POSIX shell fragment
 #
 
-# Additional options that are passed to the Daemon.
-DAEMON_OPTS=""
-
-#SHEEPDOG_PATH="/var/lib/sheepdog"
+#SHEEPDOG_START_SEQUENCE="_1 _2"
+#SHEEPDOG_DEAMON_ARGS_1="-p 7000 -v 32 -z 1"
+#SHEEPDOG_DEAMON_ARGS_2="-p 7001 -v 32 -z 1"
+#SHEEPDOG_PATH_1="/var/lib/sheepdog/disc1"
+#SHEEPDOG_PATH_2="/var/lib/sheepdog/disc2"

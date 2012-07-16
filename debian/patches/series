@@ -1,3 +1,4 @@
 disable-test-suite.patch
 fix-manpage-section.patch
 do-not-install-generic-init-script.patch
+add-pid-file-option.patch

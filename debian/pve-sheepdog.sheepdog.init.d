@@ -24,7 +24,9 @@ SCRIPTNAME=/etc/init.d/$NAME
 [ -x $DAEMON ] || exit 0
 
 # Defaults
-SHEEPDOG_PATH="/var/lib/sheepdog"
+SHEEPDOG_START_SEQUENCE="_1"
+SHEEPDOG_DEAMON_ARGS_1=""
+SHEEPDOG_PATH_1="/var/lib/sheepdog/disc1"
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -54,16 +56,24 @@ do_start()
 {
         mkdir -p /var/run
 
-        mkdir -p $SHEEPDOG_PATH
-
-	# Return
+ 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
 
- 	status "$DAEMON" >/dev/null && return 1
+ 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
+		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
+		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
+		eval PIDFILE=/var/run/$NAME$SHEEP.pid
 
-	start-stop-daemon --start --quiet --exec $DAEMON -- $DAEMON_ARGS $SHEEPDOG_PATH || return 2
+		mkdir -p $SHEEPDOG_PATH
+
+		status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
+
+		start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- --pidfile ${PIDFILE} $DAEMON_ARGS $SHEEPDOG_PATH || return 2
+	done
+
+	return 0
 }
 
 #
@@ -77,14 +87,13 @@ do_stop()
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
 
-        status "$DAEMON" >/dev/null || return 1
-
-	start-stop-daemon --stop --retry=TERM/20/KILL/5 --exec $DAEMON
-	RETVAL="$?"
-	[ "$RETVAL" = 2 ] && return 2
-
-	# Many daemons don't delete their pidfiles when they exit.
-	# rm -f $PIDFILE
+	RETVAL=0
+ 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
+		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
+		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
+		eval PIDFILE=/var/run/$NAME$SHEEP.pid
+		start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || RETVAL=2
+	done
 
 	return "$RETVAL"
 }
@@ -105,9 +114,15 @@ case "$1" in
 	    0|1) log_end_msg 0 ;;
 	    2) log_end_msg 1 ;;
 	esac
+	
 	;;
     status)
-	status "$DAEMON" && exit 0 || exit $?
+ 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
+		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
+		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
+		eval PIDFILE=/var/run/$NAME$SHEEP.pid
+		status_of_proc -p ${PIDFILE} $DAEMON "$NAME${SHEEP}" || exit $?
+	done
 	;;
     restart|force-reload)
 	log_daemon_msg "Restarting $DESC" "$NAME"
