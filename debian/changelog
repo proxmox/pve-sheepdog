@@ -1,3 +1,11 @@
+pve-sheepdog (0.4.0-3) unstable; urgency=low
+
+  * Simplify logfile rotation. We simply rename <logfile> to
+    <logfile>.1. That way we do not need any logrotate script. max_logfile
+    is set to 256MB.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 17 Jul 2012 14:47:32 +0200
+
 pve-sheepdog (0.4.0-2) unstable; urgency=low
 
   * update to master branch
