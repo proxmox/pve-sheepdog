@@ -16,8 +16,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Sheepdog Server"        # Introduce a short description here
 NAME=sheepdog                 # Introduce the short server's name here
 DAEMON=/usr/sbin/sheep        # Introduce the server's location here
-DAEMON_ARGS=""                # Arguments to run the daemon with
-##PIDFILE=/var/run/sheep.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
