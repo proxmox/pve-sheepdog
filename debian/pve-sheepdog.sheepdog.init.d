@@ -35,18 +35,6 @@ fi
 
 . /lib/lsb/init-functions
 
-status()
-{
-	pid=$(pidof $1 2>/dev/null)
-	rtrn=$?
-	if [ $rtrn -ne 0 ]; then
-		echo "$1 is stopped"
-	else
-		echo "$1 (pid $pid) is running..."
-	fi
-	return $rtrn
-}
-
 #
 # Function that starts the daemon/service
 #
@@ -115,12 +103,14 @@ case "$1" in
 	
 	;;
     status)
+	RETVAL=0
  	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
 		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
 		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
 		eval PIDFILE=/var/run/$NAME$SHEEP.pid
-		status_of_proc -p ${PIDFILE} $DAEMON "$NAME${SHEEP}" || exit $?
+		status_of_proc -p ${PIDFILE} $DAEMON "$NAME${SHEEP}" || RETVAL=1
 	done
+	exit $RETVAL
 	;;
     restart|force-reload)
 	log_daemon_msg "Restarting $DESC" "$NAME"
