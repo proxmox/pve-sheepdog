@@ -1,7 +1,7 @@
 RELEASE=2.1
 
 PACKAGE=pve-sheepdog
-PKGREL=3
+PKGREL=4
 SDVER=0.4.0
 
 DEB=${PACKAGE}_${SDVER}-${PKGREL}_amd64.deb
@@ -16,7 +16,7 @@ ${DEB} deb: ${SDSRC}
 	tar xf ${SDSRC}
 	cp -av debian ${SDDIR}/debian
 	cd ${SDDIR}; dpkg-buildpackage -rfakeroot -b -us -uc
-	lintian --suppress-tags possible-gpl-code-linked-with-openssl ${DEB}
+	lintian ${DEB}
 
 .PHONY: download
 ${SDSRC} download:
