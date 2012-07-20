@@ -1,0 +1,134 @@
+From eabd38a0259767353daeb34e38bee03e899a6918 Mon Sep 17 00:00:00 2001
+From: Dietmar Maurer <dietmar@proxmox.com>
+Date: Fri, 20 Jul 2012 09:29:19 +0200
+Subject: [PATCH] new option -i to initialize storage directory
+
+Each directory used by sheepdog must have a '.sheepdog_lock' file. Users can create that file running 'sheep -i /path/to/store'. The daemon will not start if that file is missing.
+
+This prevent users from starting sheep on wrong directories, for example when mount with fstab fails on startup.
+
+Signed-off-by: Dietmar Maurer <dietmar@proxmox.com>
+---
+ sheep/sheep.c      |   16 ++++++++++++++--
+ sheep/sheep_priv.h |    1 +
+ sheep/store.c      |    8 ++++----
+ 3 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/sheep/sheep.c b/sheep/sheep.c
+index 2e208de..8922415 100644
+--- a/sheep/sheep.c
++++ b/sheep/sheep.c
+@@ -41,6 +41,7 @@ static struct option const long_options[] = {
+ 	{"foreground", no_argument, NULL, 'f'},
+ 	{"gateway", no_argument, NULL, 'g'},
+ 	{"help", no_argument, NULL, 'h'},
++	{"initialize", no_argument, NULL, 'i'},
+ 	{"loglevel", required_argument, NULL, 'l'},
+ 	{"myaddr", required_argument, NULL, 'y'},
+ 	{"stdout", no_argument, NULL, 'o'},
+@@ -52,7 +53,7 @@ static struct option const long_options[] = {
+ 	{NULL, 0, NULL, 0},
+ };
+ 
+-static const char *short_options = "c:dDfghl:op:P:v:wy:z:";
++static const char *short_options = "c:dDfghil:op:P:v:wy:z:";
+ 
+ static void usage(int status)
+ {
+@@ -70,6 +71,7 @@ Options:\n\
+   -f, --foreground        make the program run in the foreground\n\
+   -g, --gateway           make the progam run as a gateway mode (same as '-v 0')\n\
+   -h, --help              display this help and exit\n\
++  -i, --initialize        initialize store\n\
+   -l, --loglevel          specify the level of logging detail\n\
+   -o, --stdout            log to stdout instead of shared logger\n\
+   -p, --port              specify the TCP port on which to listen\n\
+@@ -142,6 +144,7 @@ int main(int argc, char **argv)
+ 	struct cluster_driver *cdrv;
+ 	int enable_write_cache = 0; /* disabled by default */
+ 	char *pid_file = NULL;
++	int initialize = 0;
+ 
+ 	signal(SIGPIPE, SIG_IGN);
+ 
+@@ -162,6 +165,9 @@ int main(int argc, char **argv)
+ 		case 'f':
+ 			is_daemon = 0;
+ 			break;
++		case 'i':
++			initialize = 1;
++			break;
+ 		case 'l':
+ 			log_level = strtol(optarg, &p, 10);
+ 			if (optarg == p || log_level < SDOG_EMERG ||
+@@ -249,6 +255,12 @@ int main(int argc, char **argv)
+ 	if (optind != argc)
+ 		dir = argv[optind];
+ 
++	if (initialize) {
++		if (init_base_path(dir))
++			exit(1);
++		exit(0);
++	}
++
+ 	snprintf(path, sizeof(path), "%s/" LOG_FILE_NAME, dir);
+ 
+ 	srandom(port);
+@@ -256,7 +268,7 @@ int main(int argc, char **argv)
+ 	if (is_daemon && daemon(0, 0))
+ 		exit(1);
+ 
+-	ret = init_base_path(dir);
++	ret = lock_base_dir(dir, 0);
+ 	if (ret)
+ 		exit(1);
+ 
+diff --git a/sheep/sheep_priv.h b/sheep/sheep_priv.h
+index 116be97..d21f33f 100644
+--- a/sheep/sheep_priv.h
++++ b/sheep/sheep_priv.h
+@@ -189,6 +189,7 @@ static inline uint32_t sys_epoch(void)
+ int create_listen_port(int port, void *data);
+ 
+ int init_store(const char *dir, int enable_write_cache);
++int lock_base_dir(const char *d, int create);
+ int init_base_path(const char *dir);
+ 
+ int add_vdi(char *data, int data_len, uint64_t size, uint32_t *new_vid,
+diff --git a/sheep/store.c b/sheep/store.c
+index a05822d..69c641d 100644
+--- a/sheep/store.c
++++ b/sheep/store.c
+@@ -261,9 +261,9 @@ again:
+ 	return 0;
+ }
+ 
+-#define LOCK_PATH "/lock"
++#define LOCK_PATH "/.sheepdog_lock"
+ 
+-static int lock_base_dir(const char *d)
++int lock_base_dir(const char *d, int create)
+ {
+ 	char *lock_path;
+ 	int ret = 0;
+@@ -272,7 +272,7 @@ static int lock_base_dir(const char *d)
+ 	lock_path = zalloc(strlen(d) + strlen(LOCK_PATH) + 1);
+ 	sprintf(lock_path, "%s" LOCK_PATH, d);
+ 
+-	fd = open(lock_path, O_WRONLY|O_CREAT, def_fmode);
++	fd = open(lock_path, create ? O_WRONLY|O_CREAT : O_WRONLY, def_fmode);
+ 	if (fd < 0) {
+ 		eprintf("failed to open lock file %s (%s)\n",
+ 			lock_path, strerror(errno));
+@@ -304,7 +304,7 @@ int init_base_path(const char *d)
+ 	ret = init_path(d, &new);
+ 	if (ret)
+ 		return ret;
+-	return lock_base_dir(d);
++	return lock_base_dir(d, 1);
+ }
+ 
+ #define OBJ_PATH "/obj/"
+-- 
+1.7.2.5
+
