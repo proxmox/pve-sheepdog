@@ -1,3 +1,9 @@
+pve-sheepdog (0.4.0-6) unstable; urgency=low
+
+  * new init.d script, now scans /var/lib/sheepdog/disk[0-9]/startup
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 23 Jul 2012 14:21:41 +0200
+
 pve-sheepdog (0.4.0-5) unstable; urgency=low
 
   * introduce new sheep -i option to prevent users from using wrong

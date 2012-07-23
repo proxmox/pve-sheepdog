@@ -1,4 +1,3 @@
 disable-test-suite.patch
 do-not-install-generic-init-script.patch
 simplify-log-rotation.patch
-new-option-i-to-initialize-storage-directory.patch

@@ -21,10 +21,11 @@ SCRIPTNAME=/etc/init.d/$NAME
 # Exit if the package is not installed
 [ -x $DAEMON ] || exit 0
 
-# Defaults
-SHEEPDOG_START_SEQUENCE="_1"
-SHEEPDOG_DEAMON_ARGS_1=""
-SHEEPDOG_PATH_1="/var/lib/sheepdog/disc1"
+DISKLIST=$(echo /var/lib/sheepdog/disc[0123456789])
+RDISKLIST=
+for dir in ${DISKLIST}; do
+    RDISKLIST="${dir} ${RDISKLIST}"
+done
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -47,16 +48,20 @@ do_start()
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
 
- 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
-		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
-		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
-		eval PIDFILE=/var/run/$NAME$SHEEP.pid
+	for dir in ${DISKLIST}; do
+	    test -f "${dir}/startup" || continue
+	    DAEMON_ARGS=$(head -n1 "${dir}/startup");
+	    DISKID=${dir##/var/lib/sheepdog/disc}
+	    PIDFILE="$dir/sheep.pid"
+	    DAEMON_ARGS="${DAEMON_ARGS} --pidfile ${PIDFILE}"
+	    if ! test "$(echo ${DAEMON_ARGS}|grep -c '\-p ')" -eq 1 ; then
+		DAEMON_ARGS="${DAEMON_ARGS} -p $((7000 + ${DISKID}))"
+	    fi
 
-		mkdir -p $SHEEPDOG_PATH
+	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
 
-		status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
-
-		start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- --pidfile ${PIDFILE} $DAEMON_ARGS $SHEEPDOG_PATH || return 2
+	    start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- $DAEMON_ARGS ${dir} || return 2
+	    sleep 1
 	done
 
 	return 0
@@ -74,11 +79,11 @@ do_stop()
 	#   other if a failure occurred
 
 	RETVAL=0
- 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
-		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
-		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
-		eval PIDFILE=/var/run/$NAME$SHEEP.pid
-		start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || RETVAL=2
+	for dir in ${RDISKLIST}; do
+	    test -f "${dir}/startup" || continue
+	    PIDFILE="$dir/sheep.pid"
+	    start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || RETVAL=2
+	    sleep 1
 	done
 
 	return "$RETVAL"
@@ -104,11 +109,10 @@ case "$1" in
 	;;
     status)
 	RETVAL=0
- 	for SHEEP in $SHEEPDOG_START_SEQUENCE; do
-		eval DAEMON_ARGS=\$SHEEPDOG_DEAMON_ARGS$SHEEP
-		eval SHEEPDOG_PATH=\$SHEEPDOG_PATH$SHEEP
-		eval PIDFILE=/var/run/$NAME$SHEEP.pid
-		status_of_proc -p ${PIDFILE} $DAEMON "$NAME${SHEEP}" || RETVAL=1
+	for dir in ${DISKLIST}; do
+	    test -f "${dir}/startup" || continue
+	    PIDFILE="$dir/sheep.pid"
+	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME ${dir}" || RETVAL=1
 	done
 	exit $RETVAL
 	;;

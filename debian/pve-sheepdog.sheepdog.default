@@ -1,16 +1,6 @@
 # Defaults for pve-sheepdog initscript
 # sourced by /etc/init.d/pve-sheepdog
-# installed at /etc/default/pve-sheepdog by the maintainer scripts
 
 # start sheepdog at boot [yes|no]
 START=yes
 
-#
-# This is a POSIX shell fragment
-#
-
-#SHEEPDOG_START_SEQUENCE="_1 _2"
-#SHEEPDOG_DEAMON_ARGS_1="-p 7000 -v 32 -z 1"
-#SHEEPDOG_DEAMON_ARGS_2="-p 7001 -v 32 -z 1"
-#SHEEPDOG_PATH_1="/var/lib/sheepdog/disc1"
-#SHEEPDOG_PATH_2="/var/lib/sheepdog/disc2"
