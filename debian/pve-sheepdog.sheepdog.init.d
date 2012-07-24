@@ -61,7 +61,6 @@ do_start()
 	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
 
 	    start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- $DAEMON_ARGS ${dir} || return 2
-	    sleep 1
 	done
 
 	return 0
@@ -83,7 +82,6 @@ do_stop()
 	    test -f "${dir}/startup" || continue
 	    PIDFILE="$dir/sheep.pid"
 	    start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || RETVAL=2
-	    sleep 1
 	done
 
 	return "$RETVAL"

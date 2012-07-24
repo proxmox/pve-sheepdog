@@ -1,3 +1,9 @@
+pve-sheepdog (0.4.0-7) unstable; urgency=low
+
+  * remove unnecessary sleep inside init.d script
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 24 Jul 2012 14:26:32 +0200
+
 pve-sheepdog (0.4.0-6) unstable; urgency=low
 
   * new init.d script, now scans /var/lib/sheepdog/disk[0-9]/startup
