@@ -2,7 +2,7 @@ RELEASE=2.2
 
 PACKAGE=pve-sheepdog
 PKGREL=1
-SDVER=0.5.3
+SDVER=0.5.4
 
 DEB=${PACKAGE}_${SDVER}-${PKGREL}_amd64.deb
 
