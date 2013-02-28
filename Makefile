@@ -1,4 +1,4 @@
-RELEASE=2.2
+RELEASE=2.3
 
 PACKAGE=pve-sheepdog
 PKGREL=1

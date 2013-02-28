@@ -6,9 +6,9 @@ any logrotate script. max_logfile is set to 256MB.
 
 Index: new/lib/logger.c
 ===================================================================
---- a/lib/logger.c
-+++ b/lib/logger.c
-@@ -97,7 +97,7 @@ static pid_t logger_pid;
+--- new.orig/lib/logger.c	2013-02-28 07:15:26.000000000 +0100
++++ new/lib/logger.c	2013-02-28 07:29:55.000000000 +0100
+@@ -75,7 +75,7 @@
  static key_t semkey;
  static char *log_buff;
  
@@ -17,7 +17,7 @@ Index: new/lib/logger.c
  
  static pthread_mutex_t logsize_lock = PTHREAD_MUTEX_INITIALIZER;
  
-@@ -357,14 +357,7 @@ static notrace void rotate_log(void)
+@@ -243,13 +243,7 @@
  
  	if (access(log_nowname, R_OK) == 0) {
  		char old_logfile[256];
@@ -25,10 +25,9 @@ Index: new/lib/logger.c
 -		struct tm tm;
 -		time(&t);
 -		localtime_r((const time_t *)&t, &tm);
--		snprintf(old_logfile, sizeof(old_logfile),
--			 "%s.%04d-%02d-%02d-%02d-%02d",
--			 log_nowname, tm.tm_year + 1900, tm.tm_mon + 1,
--			 tm.tm_mday, tm.tm_hour, tm.tm_min);
+-		sprintf(old_logfile, "%s.%04d-%02d-%02d-%02d-%02d",
+-				log_nowname, tm.tm_year + 1900, tm.tm_mon + 1,
+-				tm.tm_mday, tm.tm_hour, tm.tm_min);
 +		sprintf(old_logfile, "%s.1", log_nowname);
  		rename(log_nowname, old_logfile);
  	}
