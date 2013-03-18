@@ -1,4 +1,4 @@
-RELEASE=2.3
+RELEASE=3.0
 
 PACKAGE=pve-sheepdog
 PKGREL=1
@@ -16,7 +16,7 @@ ${DEB} deb: ${SDSRC}
 	tar xf ${SDSRC}
 	cp -av debian ${SDDIR}/debian
 	cd ${SDDIR}; dpkg-buildpackage -rfakeroot -b -us -uc
-	lintian ${DEB}
+	lintian -X copyright-file ${DEB}
 
 .PHONY: download
 ${SDSRC} download:
