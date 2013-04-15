@@ -1,8 +1,8 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          sheepdog
-# Required-Start:    $network $remote_fs $syslog
-# Required-Stop:     $network $remote_fs $syslog
+# Required-Start:    $network $remote_fs $syslog cman
+# Required-Stop:     $network $remote_fs $syslog cman
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Sheepdog server
