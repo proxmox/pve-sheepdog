@@ -17,15 +17,13 @@ DESC="Sheepdog Server"        # Introduce a short description here
 NAME=sheepdog                 # Introduce the short server's name here
 DAEMON=/usr/sbin/sheep        # Introduce the server's location here
 SCRIPTNAME=/etc/init.d/$NAME
+PIDFILE="/var/run/sheep.pid"
 
 # Exit if the package is not installed
 [ -x $DAEMON ] || exit 0
 
-DISKLIST=$(echo /var/lib/sheepdog/disc[0123456789])
-RDISKLIST=
-for dir in ${DISKLIST}; do
-    RDISKLIST="${dir} ${RDISKLIST}"
-done
+ROOTDIR="/var/lib/sheepdog/"
+JOURNALSIZE="256"
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -47,21 +45,25 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
+	ulimit -n 1024000 #avoid check_host_env(395) WARN: Allowed open files 1024 too small, suggested 1024000 warning message
+	ulimit -c unlimited #avoid check_host_env(404) Allowed core file size 0, suggested unlimited warning message
+	DAEMON_ARGS="--pidfile ${PIDFILE}"
+	DAEMON_ARGS="${DAEMON_ARGS} $ROOTDIR"
 
-	for dir in ${DISKLIST}; do
-	    test -f "${dir}/startup" || continue
-	    DAEMON_ARGS=$(head -n1 "${dir}/startup");
-	    DISKID=${dir##/var/lib/sheepdog/disc}
-	    PIDFILE="$dir/sheep.pid"
-	    DAEMON_ARGS="${DAEMON_ARGS} --pidfile ${PIDFILE}"
-	    if ! test "$(echo ${DAEMON_ARGS}|grep -c '\-p ')" -eq 1 ; then
-		DAEMON_ARGS="${DAEMON_ARGS} -p $((7000 + ${DISKID}))"
+	# /path/to/meta-store,/path/to/disk1{,/path/to/disk2,...}
+	for d in $ROOTDIR/disc*
+	do
+	    if [ -d "$d" ]; then
+		DAEMON_ARGS="${DAEMON_ARGS},$d"
 	    fi
-
-	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
-
-	    start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- $DAEMON_ARGS ${dir} || return 2
 	done
+
+	if [ -d "$ROOTDIR/journal" ]; then
+		DAEMON_ARGS="${DAEMON_ARGS} -j dir=$ROOTDIR/journal,size=$JOURNALSIZE"
+
+	fi
+        status_of_proc -p ${PIDFILE} $DAEMON "$NAME" >/dev/null && continue
+        start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec $DAEMON -- $DAEMON_ARGS || return 2
 
 	return 0
 }
@@ -77,14 +79,7 @@ do_stop()
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
 
-	RETVAL=0
-	for dir in ${RDISKLIST}; do
-	    test -f "${dir}/startup" || continue
-	    PIDFILE="$dir/sheep.pid"
-	    start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || RETVAL=2
-	done
-
-	return "$RETVAL"
+	start-stop-daemon --stop --oknodo --retry=TERM/20/KILL/5 --quiet --pidfile ${PIDFILE} --exec $DAEMON || return 2
 }
 
 case "$1" in
@@ -106,13 +101,7 @@ case "$1" in
 	
 	;;
     status)
-	RETVAL=0
-	for dir in ${DISKLIST}; do
-	    test -f "${dir}/startup" || continue
-	    PIDFILE="$dir/sheep.pid"
-	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME ${dir}" || RETVAL=1
-	done
-	exit $RETVAL
+	    status_of_proc -p ${PIDFILE} $DAEMON "$NAME ${dir}" || exit 1
 	;;
     restart|force-reload)
 	log_daemon_msg "Restarting $DESC" "$NAME"

@@ -1,23 +1,30 @@
-simplify logfile rotation
+From fefd0589f89fb3948723f7a5cda7f734d13b30a6 Mon Sep 17 00:00:00 2001
+From: Alexandre Derumier <aderumier@odiso.com>
+Date: Thu, 6 Jun 2013 09:17:02 +0200
+Subject: [PATCH] simplify logfile rotation
 
 we simply rename <logfile> to <logfile>.1. That way we do not need
 any logrotate script. max_logfile is set to 256MB.
 
+Signed-off-by: Alexandre Derumier <aderumier@odiso.com>
+---
+ lib/logger.c |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-Index: new/lib/logger.c
-===================================================================
---- new.orig/lib/logger.c	2013-02-28 07:15:26.000000000 +0100
-+++ new/lib/logger.c	2013-02-28 07:29:55.000000000 +0100
-@@ -75,7 +75,7 @@
+diff --git a/lib/logger.c b/lib/logger.c
+index ba9f5db..23635c2 100644
+--- a/lib/logger.c
++++ b/lib/logger.c
+@@ -113,7 +113,7 @@ static pid_t logger_pid;
  static key_t semkey;
  static char *log_buff;
  
 -static int64_t max_logsize = 500 * 1024 * 1024;  /*500MB*/
-+static int64_t max_logsize = 256 * 1024 * 1024;  /*500MB*/
++static int64_t max_logsize = 256 * 1024 * 1024;  /*256MB*/
  
  static pthread_mutex_t logsize_lock = PTHREAD_MUTEX_INITIALIZER;
  
-@@ -243,13 +243,7 @@
+@@ -405,14 +405,7 @@ static notrace void rotate_log(void)
  
  	if (access(log_nowname, R_OK) == 0) {
  		char old_logfile[256];
@@ -25,10 +32,14 @@ Index: new/lib/logger.c
 -		struct tm tm;
 -		time(&t);
 -		localtime_r((const time_t *)&t, &tm);
--		sprintf(old_logfile, "%s.%04d-%02d-%02d-%02d-%02d",
--				log_nowname, tm.tm_year + 1900, tm.tm_mon + 1,
--				tm.tm_mday, tm.tm_hour, tm.tm_min);
+-		snprintf(old_logfile, sizeof(old_logfile),
+-			 "%s.%04d-%02d-%02d-%02d-%02d",
+-			 log_nowname, tm.tm_year + 1900, tm.tm_mon + 1,
+-			 tm.tm_mday, tm.tm_hour, tm.tm_min);
 +		sprintf(old_logfile, "%s.1", log_nowname);
  		rename(log_nowname, old_logfile);
  	}
  	new_fd = open(log_nowname, O_RDWR | O_CREAT | O_APPEND, 0644);
+-- 
+1.7.10.4
+
