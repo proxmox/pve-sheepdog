@@ -3,6 +3,6 @@
 
 # start sheepdog at boot [yes|no]
 START=yes
-#sheepdog root directory
-ROOTDIR=/var/lib/sheepdog/
-JOURNALSIZE=256
+# sheepdog root directory
+#ROOTDIR=/var/lib/sheepdog/
+#JOURNALSIZE=256
