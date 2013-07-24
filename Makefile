@@ -15,6 +15,7 @@ all: ${DEB}
 ${DEB} deb: ${SDSRC}
 	rm -rf ${SDDIR}
 	tar xf ${SDSRC}
+	mv ${SDDIR}/debian ${SDDIR}/debian.org
 	cp -av debian ${SDDIR}/debian
 	cd ${SDDIR}; dpkg-buildpackage -rfakeroot -b -us -uc
 	lintian -X copyright-file ${DEB}
