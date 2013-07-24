@@ -1,7 +1,7 @@
 RELEASE=3.0
 
 PACKAGE=pve-sheepdog
-PKGREL=2
+PKGREL=3
 SDVER=0.6.0
 BRANCH=stable-0.6
 

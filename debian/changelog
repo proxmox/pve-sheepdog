@@ -1,3 +1,13 @@
+pve-sheepdog (0.6.0-3) unstable; urgency=low
+
+  * Include updates from stable branch
+  
+    - Update git to stable branch 
+    - cache: don't push read-only obj
+    - sheep: delete cache objects only when they are successfully pushed ect 
+  
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 24 Jul 2013 09:27:09 +0200
+
 pve-sheepdog (0.6.0-2) unstable; urgency=low
 
   * Update git to stable branch
