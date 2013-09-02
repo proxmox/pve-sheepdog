@@ -5,7 +5,10 @@ PKGREL=3
 SDVER=0.6.0
 BRANCH=stable-0.6
 
-DEB=${PACKAGE}_${SDVER}-${PKGREL}_amd64.deb
+ARCH:=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
+GITVERSION:=$(shell cat .git/refs/heads/master)
+
+DEB=${PACKAGE}_${SDVER}-${PKGREL}_${ARCH}.deb
 
 SDDIR=sheepdog-${SDVER}
 SDSRC=${SDDIR}.tar.gz
@@ -17,6 +20,7 @@ ${DEB} deb: ${SDSRC}
 	tar xf ${SDSRC}
 	mv ${SDDIR}/debian ${SDDIR}/debian.org
 	cp -av debian ${SDDIR}/debian
+	echo "git clone git://git.proxmox.com/git/pve-sheepdog.git\\ngit checkout ${GITVERSION}" > ${SDDIR}/debian/SOURCE
 	cd ${SDDIR}; dpkg-buildpackage -rfakeroot -b -us -uc
 	lintian -X copyright-file ${DEB}
 
