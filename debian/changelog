@@ -1,3 +1,9 @@
+pve-sheepdog (0.6.3-1) unstable; urgency=low
+
+  * Bump to sheepdog 0.6.3
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 15 Sep 2013 11:23:00 +0200
+
 pve-sheepdog (0.6.2-1) unstable; urgency=low
 
   * Bump to sheepdog 0.6.2
