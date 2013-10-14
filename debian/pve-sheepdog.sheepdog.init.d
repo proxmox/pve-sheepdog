@@ -24,6 +24,7 @@ PIDFILE="/var/run/sheep.pid"
 
 ROOTDIR="/var/lib/sheepdog/"
 JOURNALSIZE="256"
+DAEMON_ARGS=""
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -47,7 +48,7 @@ do_start()
 	#   2 if daemon could not be started
 	ulimit -n 1024000 #avoid check_host_env(395) WARN: Allowed open files 1024 too small, suggested 1024000 warning message
 	ulimit -c unlimited #avoid check_host_env(404) Allowed core file size 0, suggested unlimited warning message
-	DAEMON_ARGS="--pidfile ${PIDFILE}"
+	DAEMON_ARGS="${DAEMON_ARGS} --pidfile ${PIDFILE}"
 	DAEMON_ARGS="${DAEMON_ARGS} $ROOTDIR"
 
 	# /path/to/meta-store,/path/to/disk1{,/path/to/disk2,...}
