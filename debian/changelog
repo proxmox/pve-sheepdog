@@ -1,3 +1,9 @@
+pve-sheepdog (0.6.3-2) unstable; urgency=low
+
+  * allow to set DAEMON_ARGS in /etc/default/sheepdog
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 14 Oct 2013 08:26:37 +0200
+
 pve-sheepdog (0.6.3-1) unstable; urgency=low
 
   * Bump to sheepdog 0.6.3
