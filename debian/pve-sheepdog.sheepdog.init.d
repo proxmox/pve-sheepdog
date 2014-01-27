@@ -23,7 +23,7 @@ PIDFILE="/var/run/sheep.pid"
 [ -x $DAEMON ] || exit 0
 
 ROOTDIR="/var/lib/sheepdog/"
-JOURNALSIZE="256"
+JOURNALSIZE="256M"
 DAEMON_ARGS=""
 
 # Read configuration variable file if it is present

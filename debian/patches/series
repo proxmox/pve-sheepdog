@@ -1,2 +1,2 @@
-do-not-install-generic-init-script.patch
+#do-not-install-generic-init-script.patch
 simplify-log-rotation.patch
