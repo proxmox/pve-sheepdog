@@ -1,3 +1,11 @@
+pve-sheepdog (0.8.2-1) unstable; urgency=low
+
+  * Bump to sheepdog 0.8.2
+
+    - Add zookeeper support
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 29 Jun 2014 20:00:00 +0200
+
 pve-sheepdog (0.8.0-1) unstable; urgency=low
 
   * Bump to sheepdog 0.8.0

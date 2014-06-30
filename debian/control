@@ -11,13 +11,14 @@ Build-Depends: debhelper (>= 7.0.50~),
  python,
  liburcu-dev (>= 0.6.7),
  libssl-dev,
- libfuse-dev
+ libfuse-dev,
+ libzookeeper-mt-dev
 Standards-Version: 3.8.4
 Homepage: http://www.osrg.net/sheepdog/
 
 Package: pve-sheepdog
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends} corosync-pve
+Depends: ${shlibs:Depends}, ${misc:Depends} corosync-pve, libzookeeper-mt2
 Description: Distributed storage system for KVM/QEMU
  Sheepdog provides highly available block level storage volumes that can be
  attached to KVM/QEMU virtual machines. Sheepdog scales to several hundreds
