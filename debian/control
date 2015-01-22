@@ -12,7 +12,8 @@ Build-Depends: debhelper (>= 7.0.50~),
  liburcu-dev (>= 0.6.7),
  libssl-dev,
  libfuse-dev,
- libzookeeper-mt-dev
+ libzookeeper-mt-dev,
+ yasm
 Standards-Version: 3.8.4
 Homepage: http://www.osrg.net/sheepdog/
 

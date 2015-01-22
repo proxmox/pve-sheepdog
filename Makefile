@@ -1,8 +1,8 @@
-RELEASE=3.2
+RELEASE=3.3
 
 PACKAGE=pve-sheepdog
 PKGREL=1
-SDVER=0.8.2
+SDVER=0.9.0
 
 ARCH:=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 GITVERSION:=$(shell cat .git/refs/heads/master)
