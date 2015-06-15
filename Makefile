@@ -1,7 +1,7 @@
-RELEASE=3.4
+RELEASE=4.0
 
 PACKAGE=pve-sheepdog
-PKGREL=3
+PKGREL=4
 SDVER=0.9.2
 
 ARCH:=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
