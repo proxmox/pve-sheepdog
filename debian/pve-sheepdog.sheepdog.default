@@ -1,8 +1,5 @@
-# Defaults for pve-sheepdog initscript
-# sourced by /etc/init.d/pve-sheepdog
+# Defaults for sheepdog service
 
-# start sheepdog at boot [yes|no]
-START=yes
 # sheepdog root directory
 #ROOTDIR=/var/lib/sheepdog/
 #JOURNALSIZE=256M

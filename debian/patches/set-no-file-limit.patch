@@ -1,0 +1,12 @@
+Index: new/script/sheepdog.service.in
+===================================================================
+--- new.orig/script/sheepdog.service.in
++++ new/script/sheepdog.service.in
+@@ -13,6 +13,7 @@ Type=forking
+ Restart=on-abort
+ StartLimitInterval=10s
+ StartLimitBurst=3
++LimitNOFILE=infinity
+ 
+ [Install]
+ WantedBy=multi-user.target

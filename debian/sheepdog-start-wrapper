@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DAEMON=/usr/sbin/sheep
+PIDFILE="/var/run/sheep.pid"
+
+[ -z "$ROOTDIR" ] && ROOTDIR="/var/lib/sheepdog/"
+[ -z "$JOURNALSIZE" ] && JOURNALSIZE="256M"
+[ -z "$DAEMON_ARGS" ] && DAEMON_ARGS=""
+
+DAEMON_ARGS="${DAEMON_ARGS} --pidfile ${PIDFILE}"
+DAEMON_ARGS="${DAEMON_ARGS} $ROOTDIR"
+
+# /path/to/meta-store,/path/to/disk1{,/path/to/disk2,...}
+for d in $ROOTDIR/disc*
+do
+    if [ -d "$d" ]; then
+        DAEMON_ARGS="${DAEMON_ARGS},$d"
+    fi
+done
+
+if [ -d "$ROOTDIR/journal" ]; then
+    DAEMON_ARGS="${DAEMON_ARGS} -j dir=$ROOTDIR/journal,size=$JOURNALSIZE"
+fi
+
+$DAEMON $DAEMON_ARGS 

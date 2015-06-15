@@ -5,12 +5,19 @@
 export DEB_BUILD_HARDENING=1
 
 %:
-	dh --with quilt $@ 
+	dh --with quilt,systemd $@ 
+
+override_dh_auto_install:
+	dh_auto_install
+	rm debian/pve-sheepdog/etc/init.d/sheepdog
+	rmdir debian/pve-sheepdog/etc/init.d
+	install -D -m 0755 debian/sheepdog-start-wrapper debian/pve-sheepdog/usr/lib/sheepdog/sheepdog-start-wrapper
 
 override_dh_installinit:
+	# just install install pve-sheepdog.sheepdog.default
 	dh_installinit --name sheepdog
 
 override_dh_auto_configure:
 	./autogen.sh
-	dh_auto_configure -- --enable-zookeeper
+	dh_auto_configure -- --enable-zookeeper --enable-systemd
 

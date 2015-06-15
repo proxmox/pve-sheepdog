@@ -1,0 +1,12 @@
+Index: new/script/sheepdog.service.in
+===================================================================
+--- new.orig/script/sheepdog.service.in
++++ new/script/sheepdog.service.in
+@@ -2,6 +2,7 @@
+ Description=Sheepdog QEMU/KVM Block Storage
+ After=network.target
+ Wants=syslog.target
++ConditionFileIsExecutable=/usr/sbin/sheep
+ 
+ [Service]
+ EnvironmentFile=-@SYSCONFDIR@/default/sheepdog
