@@ -1,3 +1,9 @@
+pve-sheepdog (0.9.3-1) unstable; urgency=medium
+
+  * bump to 0.9.3
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 24 Nov 2015 12:00:30 +0200
+
 pve-sheepdog (0.9.2-4) unstable; urgency=medium
 
   * recompile for debian jessie
