@@ -3,3 +3,4 @@ simplify-log-rotation.patch
 set-no-file-limit.patch
 cleanup-systemd-service.patch
 add-service-start-condition.patch
+fix-sheepdog-service-depends.patch

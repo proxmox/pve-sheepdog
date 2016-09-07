@@ -1,0 +1,19 @@
+sheepdog requires corosync, so we start the service after corosync
+
+Also remove syslog.target, because that is not required (we
+have journald).
+
+
+Index: new/script/sheepdog.service.in
+===================================================================
+--- new.orig/script/sheepdog.service.in
++++ new/script/sheepdog.service.in
+@@ -1,7 +1,7 @@
+ [Unit]
+ Description=Sheepdog QEMU/KVM Block Storage
+ After=network.target
+-Wants=syslog.target
++After=corosync.service
+ ConditionFileIsExecutable=/usr/sbin/sheep
+ 
+ [Service]
