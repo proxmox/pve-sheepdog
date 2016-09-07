@@ -27,9 +27,7 @@ ${DEB} deb: ${SDSRC}
 ${SDSRC} download:
 	rm -rf ${SDDIR} sheepdog.git
 	git clone git://github.com/sheepdog/sheepdog.git -b v1.0 sheepdog.git
-	rsync -a --exclude .git --exclude .gitignore sheepdog.git/ ${SDDIR}
-	tar czf ${SDSRC}.tmp  ${SDDIR}
-	rm -rf ${SDDIR}
+	cd sheepdog.git; git archive --format=tar.gz -o ../${SDSRC}.tmp v1.0 --prefix=${SDDIR}/
 	mv ${SDSRC}.tmp ${SDSRC}
 
 .PHONY: upload
