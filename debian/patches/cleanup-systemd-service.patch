@@ -9,7 +9,7 @@ Index: new/script/sheepdog.service.in
 -EnvironmentFile=-@SYSCONFDIR@/conf.d/sheepdog.conf
 -EnvironmentFile=-@SYSCONFDIR@/sysconfig/sheepdog
  EnvironmentFile=-@SYSCONFDIR@/default/sheepdog
--ExecStart=/bin/sh -c '@SBINDIR@/sheep --pidfile @LOCALSTATEDIR@/run/sheep.pid $(if [ -z "$SHEEP_OPTS" ]; then echo "--cluster local --log dst=syslog --upgrade @LOCALSTATEDIR@/lib/sheepdog"; else echo $SHEEP_OPTS; fi)'
+-ExecStart=/bin/sh -c 'ulimit -n 32768; @SBINDIR@/sheep --pidfile @LOCALSTATEDIR@/run/sheep.pid $(if [ -z "$SHEEP_OPTS" ]; then echo "--cluster local --log dst=syslog --upgrade @LOCALSTATEDIR@/lib/sheepdog"; else echo $SHEEP_OPTS; fi)'
 +ExecStart=/usr/lib/sheepdog/sheepdog-start-wrapper
  PIDFile=@LOCALSTATEDIR@/run/sheep.pid
  Type=forking

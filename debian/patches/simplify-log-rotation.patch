@@ -11,20 +11,20 @@ Signed-off-by: Alexandre Derumier <aderumier@odiso.com>
  lib/logger.c |   11 ++---------
  1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/lib/logger.c b/lib/logger.c
-index ba9f5db..23635c2 100644
---- a/lib/logger.c
-+++ b/lib/logger.c
-@@ -113,7 +113,7 @@ static pid_t logger_pid;
+Index: new/lib/logger.c
+===================================================================
+--- new.orig/lib/logger.c
++++ new/lib/logger.c
+@@ -120,7 +120,7 @@ pid_t logger_pid = -1;
  static key_t semkey;
  static char *log_buff;
  
 -static int64_t max_logsize = 500 * 1024 * 1024;  /*500MB*/
 +static int64_t max_logsize = 256 * 1024 * 1024;  /*256MB*/
  
- static pthread_mutex_t logsize_lock = PTHREAD_MUTEX_INITIALIZER;
+ static enum log_dst_type dst_type = LOG_DST_STDOUT;
  
-@@ -405,14 +405,7 @@ static notrace void rotate_log(void)
+@@ -458,14 +458,7 @@ static void rotate_log(void)
  
  	if (access(log_nowname, R_OK) == 0) {
  		char old_logfile[256];
@@ -40,6 +40,3 @@ index ba9f5db..23635c2 100644
  		rename(log_nowname, old_logfile);
  	}
  	new_fd = open(log_nowname, O_RDWR | O_CREAT | O_APPEND, 0644);
--- 
-1.7.10.4
-
