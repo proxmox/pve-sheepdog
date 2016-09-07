@@ -1,3 +1,9 @@
+pve-sheepdog (1.0.0-1) unstable; urgency=medium
+
+  * update to v1.0
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 07 Sep 2016 07:18:55 +0200
+
 pve-sheepdog (0.9.3-1) unstable; urgency=medium
 
   * bump to 0.9.3
