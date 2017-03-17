@@ -1,5 +1,3 @@
-RELEASE=4.2
-
 PACKAGE=pve-sheepdog
 PKGREL=1
 SDVER=1.0.0
