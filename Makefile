@@ -1,6 +1,6 @@
 PACKAGE=pve-sheepdog
 PKGREL=1
-SDVER=1.0.0
+SDVER=1.0.2
 
 ARCH:=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 GITVERSION:=$(shell cat .git/refs/heads/master)
@@ -24,7 +24,7 @@ ${DEB} deb: ${SDSRC}
 .PHONY: download
 ${SDSRC} download:
 	rm -rf ${SDDIR} sheepdog.git
-	git clone git://github.com/sheepdog/sheepdog.git -b v1.0 sheepdog.git
+	git clone git://github.com/sheepdog/sheepdog.git -b v1.0.2_rc0 sheepdog.git
 	cd sheepdog.git; git archive --format=tar.gz -o ../${SDSRC}.tmp v1.0 --prefix=${SDDIR}/
 	mv ${SDSRC}.tmp ${SDSRC}
 
@@ -38,7 +38,7 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf *~ debian/*~ *.deb *.changes *.dsc ${SDDIR} ${SDSRC}.tmp
+	rm -rf *~ debian/*~ *.deb *.changes *.buildinfo *.dsc ${SDDIR} ${SDSRC}.tmp
 
 .PHONY: dinstall
 dinstall: ${DEB}

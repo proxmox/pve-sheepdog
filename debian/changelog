@@ -1,6 +1,6 @@
-pve-sheepdog (1.0.0-1) unstable; urgency=medium
+pve-sheepdog (1.0.2-1) unstable; urgency=medium
 
-  * update to v1.0
+  * update to v1.0.2_rc0
 
  -- Proxmox Support Team <support@proxmox.com>  Wed, 07 Sep 2016 07:18:55 +0200
 
