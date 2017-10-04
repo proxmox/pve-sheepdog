@@ -2,28 +2,32 @@ Source: pve-sheepdog
 Section: admin
 Priority: extra
 Maintainer: Proxmox Support Team <support@proxmox.com>
-Build-Depends: debhelper (>= 7.0.50~), 
- autotools-dev, 
- automake,
- autoconf,
- pkg-config,
- libcorosync-common-dev,
- libquorum-dev,
- libcpg-dev,
- libcfg-dev,
- python,
- liburcu-dev (>= 0.6.7),
- libssl-dev,
- libfuse-dev,
- libzookeeper-mt-dev,
- yasm,
- dh-systemd (>= 1.4)
+Build-Depends: autoconf,
+               automake,
+               autotools-dev,
+               debhelper (>= 7.0.50~),
+               dh-systemd (>= 1.4),
+               libcfg-dev,
+               libcorosync-common-dev,
+               libcpg-dev,
+               libfuse-dev,
+               libquorum-dev,
+               libssl-dev,
+               liburcu-dev (>= 0.6.7),
+               libzookeeper-mt-dev,
+               pkg-config,
+               python,
+               yasm,
 Standards-Version: 3.8.4
 Homepage: http://www.osrg.net/sheepdog/
 
 Package: pve-sheepdog
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, corosync-pve, libzookeeper-mt2, systemd
+Depends: corosync-pve,
+         libzookeeper-mt2,
+         systemd,
+         ${misc:Depends},
+         ${shlibs:Depends},
 Description: Distributed storage system for KVM/QEMU
  Sheepdog provides highly available block level storage volumes that can be
  attached to KVM/QEMU virtual machines. Sheepdog scales to several hundreds
